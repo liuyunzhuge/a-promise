@@ -99,12 +99,12 @@ function rejectPromise(promise, reason) {
 
 function finishPromise(promise) {
     for (let deferred of promise._deferreds) {
-        handlerDeferred(promise, deferred);
+        handleDeferred(promise, deferred);
     }
     promise._deferreds = [];//必须清空，否则再对已经resolved的实例继续添加回调，会导致以前的回调再次被调用
 }
 
-function handlerDeferred(promise, deferred) {
+function handleDeferred(promise, deferred) {
     // 此处setTimeout应该用micro-task的方式替代
     // https://github.com/kriskowal/asap
     setTimeout(function () {
