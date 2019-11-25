@@ -1,3 +1,4 @@
+// LAST_ERROR与IS_ERROR的设定充分利用了js是单线程运行的优势
 let LAST_ERROR = null;
 let IS_ERROR = {};
 let STATES = {
