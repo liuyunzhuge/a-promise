@@ -112,7 +112,6 @@ function handlerDeferred(promise, deferred) {
         let onRejected = typeof deferred.onRejected === 'function' ? deferred.onRejected : null;
         let cb = promise._state === STATES.RESOLVED ? onFulfilled : onRejected;
         let param = promise._state === STATES.RESOLVED ? promise._data : promise._reason;
-        let next = promise._state === STATES.RESOLVED ? resolvePromise : rejectPromise;
 
         let ret = cb && tryCallOne(cb, param);
         if (ret === IS_ERROR) {
@@ -123,7 +122,7 @@ function handlerDeferred(promise, deferred) {
                 reason => rejectPromise(deferred.promise, reason)
             );
         } else {
-            next(deferred.promise, param);
+            resolvePromise(deferred.promise, cb ? ret : param);
         }
     });
 }
