@@ -92,15 +92,24 @@ function resolvePromise(promise, data) {
 
 function rejectPromise(promise, reason) {
     promise._state = STATES.REJECTED
-    promise._reason = reason instanceof Error ? reason : new Error(reason)
+    promise._reason = reason
     finishPromise(promise)
 }
 
 function finishPromise(promise) {
-    for (let deferred of promise._deferreds) {
-        handleDeferred(promise, deferred)
+    if (promise._deferreds.length) {
+        for (let deferred of promise._deferreds) {
+            handleDeferred(promise, deferred)
+        }
+
+        //必须清空，否则再对已经resolved的实例继续添加回调，会导致以前的回调再次被调用
+        promise._deferreds = []
+    } else if (promise._state === STATES.REJECTED) {
+        //如果promise一个deferred对象都没有被添加
+        //且promise状态为rejected，则通过console.error的方式把reason输出给调用者
+        //以便排查问题
+        console.error('unhandled promise rejected state: ', promise._reason);
     }
-    promise._deferreds = []//必须清空，否则再对已经resolved的实例继续添加回调，会导致以前的回调再次被调用
 }
 
 function handleDeferred(promise, deferred) {
@@ -125,11 +134,6 @@ function handleDeferred(promise, deferred) {
         } else {
             rejectPromise(deferred.promise, param)
         }
-
-        if (promise._state === STATES.REJECTED && !param.logState) {
-            param.logState = true;
-            console.error('this log comes from console.error() ==>',param);
-        }
     })
 }
 
@@ -147,12 +151,11 @@ Promise.prototype.catch = function (onRejected) {
     return this.then(null, onRejected)
 }
 
-Promise.prototype.done = function () {
-    this.catch(reason => {
-        setTimeout(() => {
-            throw reason;
-        }, 0)
-    })
+Promise.prototype.finally = function (fn) {
+    return this.then(
+        data => Promise.resolve(fn()).then(() => data),
+        reason => Promise.resolve(fn()).then(() => { throw reason }),
+    )
 }
 
 function Deferred(promise, onFulfilled, onRejected) {

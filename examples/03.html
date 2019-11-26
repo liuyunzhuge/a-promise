@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>03</title>
+</head>
+
+<body>
+    需在开发者工具中查看代码运行结果。
+    <script type="module">
+        import Promise from "../src/core.js"
+        import "../src/static.js"
+
+        Promise.all([
+            new Promise(resolve => {
+                setTimeout(() => {
+                    resolve('p1');
+                    console.log('p1 task');
+                }, 1500);
+            }),
+            new Promise(resolve => {
+                setTimeout(() => {
+                    resolve('p2');
+                    console.log('p2 task');
+                }, 2000);
+            }),
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    reject(new Error('p3 failed')); // toggle this and next line
+                    // resolve('p3');
+                    console.log('p3 task');
+                }, 1000);
+            })
+        ]).then(data => {
+            console.log(data)
+        })
+    </script>
+</body>
+
+</html>

@@ -5,25 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Core Test</title>
+    <title>02</title>
 </head>
 
 <body>
     需在开发者工具中查看代码运行结果。
     <script type="module">
         import Promise from "../src/core.js"
+        import "../src/static.js"
 
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject('some error occured');
-            }, 1000);
-        })
-            .then(() => { })
-            .then(() => {
-
-            }).done()
-
-        // 若没有最后的.done调用，整个promise链条的错误不会被跑出来
+        Promise.resolve(1).then(data => {
+            console.log(data);
+        });
+        console.log(2);
     </script>
 </body>
 
