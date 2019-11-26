@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Core Test</title>
+</head>
+
+<body>
+    需在开发者工具中查看代码运行结果。
+    <script type="module">
+        import Promise from "../src/core.js"
+
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject('some error occured');
+            }, 1000);
+        })
+            .then(() => { })
+            .then(() => {
+
+            }).done()
+
+        // 若没有最后的.done调用，整个promise链条的错误不会被跑出来
+    </script>
+</body>
+
+</html>

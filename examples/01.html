@@ -5,10 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Core Test</title>
 </head>
 
 <body>
+    需在开发者工具中查看代码运行结果。
+    <script type="module">
+        import Promise from "../src/core.js";
+
+        function getTime() {
+            return Date.now();
+        }
+
+        console.log('start a async task');
+        let startAt = getTime();
+        let p1 = new Promise(resolve => {
+            setTimeout(() => {
+                resolve(`a async task has been resolved, after ${getTime() - startAt} ms`);
+            }, 1000);
+        });
+        console.log('promise state when p1 created', p1);
+
+        let p2 = p1.then(data => {
+            console.log('data from p1: ', data);
+
+            console.log('promise state when p1 resolved', p1, p2);
+        });
+
+        console.log('promise state when p2 created', p2);
+    </script>
 </body>
 
 </html>
