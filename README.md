@@ -25,6 +25,11 @@ Promise应该被看做一种编程思想，它的使用范围远不止于javascr
 * Promise.all这个静态方法
 * Promise.race这个静态方法
 
+**注意**
+`core.js`里面`handleDeferred`这个方法提到应该把`setTimeout`替换为`asap`的方式，我的代码里没有替换，因为毕竟只是个学习的项目；之所以要替换的原因，是按照Promise规范，Promise实例添加的回调函数应该是在要本次事件循环(`event-loop`)的末尾、下次事件循环前执行的，`asap`这个库（当然还有别的库）可以帮你做到这一点，而`setTimeout`开启的定时器会在下一次事件循环开始时才会执行。
+
+`core.js`里面`finishPromise`方法加了一个`console.error`的打印处理，这个只有在一个Promise实例没有添加任何回调，而且状态为`rejected`时才会执行，防止因为Promise吞并错误，导致使用Promise的人看不到`rejected`的相关原因。
+
 ## 测试
 ```bash
 npm install
