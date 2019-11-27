@@ -59,7 +59,7 @@ function makePromise(asyncTask, promise) {
     if (ret === IS_ERROR && !executed) {
         // ret等于IS_ERROR也有可能是asyncTask内部调用了resolve之后的代码有错导致的，所以要加一个!excecuted判断
         executed = true
-        rejectPromise(promise, ret)
+        rejectPromise(promise, LAST_ERROR)
     }
 }
 
